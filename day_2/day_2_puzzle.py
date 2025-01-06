@@ -1,3 +1,4 @@
+import time
 '''
 --- Day 2: Red-Nosed Reports ---
 
@@ -54,22 +55,15 @@ To begin, get your puzzle input (day_2_puzzle_input).
 '''
 
 def report_safety_check(report:list) -> bool:
-    sorted_report = False
-    if all(report[a] < report[a+1] for a in range(len(report)-1)) or all(report[a] > report[a+1] for a in range(len(report)-1)):
-        sorted_report = True
-    
-    difference_check = True
-    for x in range(len(report)-1):
-        if abs(report[x]-report[x+1]) < 1 or abs(report[x]-report[x+1]) > 3:
-            difference_check = False
-    
-    if difference_check and sorted_report:
+    difference_check = [report[x+1] - report[x] for x in range(len(report)-1)]
+    if (all(x < 0 and x in range(-3, 0) for x in difference_check) or 
+        all(x > 0 and x in range(1,4) for x in difference_check)):
         return True
     else:
         return False
 
 file = open('.\\day_2\\day_2_puzzle_input.txt')
-raw_input = file.read().split('\n') #In this list, every report is a full string
+raw_input = file.read().split('\n')
 sanatized_input = []
 for report in raw_input:
     temp_list_string = report.split()
@@ -111,12 +105,17 @@ Thanks to the Problem Dampener, 4 reports are actually safe!
 Update your analysis by handling situations where the Problem Dampener can 
 remove a single level from unsafe reports. How many reports are now safe?
 '''
+
 safe_report_counter_2 = 0
-for report in sanatized_input:      
-    result = report_safety_check(report)
-    if result == True:
+for report in sanatized_input:
+    if report_safety_check(report):
         safe_report_counter_2 += 1
-    elif result == False:
-        pass #Redo the safety check, but for each sublist that is missing one level from the report
-        
-print('Number of safe reports: ', safe_report_counter_2)
+    else:
+        for x in range(len(report)):
+            sub_report = report.copy()
+            sub_report.pop(x)
+            if report_safety_check(sub_report):
+                safe_report_counter_2 += 1
+                break
+
+print('Number of safe reports with the Problem Dampner: ', safe_report_counter_2)

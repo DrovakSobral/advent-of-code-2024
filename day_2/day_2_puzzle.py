@@ -52,3 +52,71 @@ Analyze the unusual data from the engineers. How many reports are safe?
 
 To begin, get your puzzle input (day_2_puzzle_input).
 '''
+
+def report_safety_check(report:list) -> bool:
+    sorted_report = False
+    if all(report[a] < report[a+1] for a in range(len(report)-1)) or all(report[a] > report[a+1] for a in range(len(report)-1)):
+        sorted_report = True
+    
+    difference_check = True
+    for x in range(len(report)-1):
+        if abs(report[x]-report[x+1]) < 1 or abs(report[x]-report[x+1]) > 3:
+            difference_check = False
+    
+    if difference_check and sorted_report:
+        return True
+    else:
+        return False
+
+file = open('.\\day_2\\day_2_puzzle_input.txt')
+raw_input = file.read().split('\n') #In this list, every report is a full string
+sanatized_input = []
+for report in raw_input:
+    temp_list_string = report.split()
+    temp_list_int = [int(x) for x in temp_list_string]
+    sanatized_input.append(temp_list_int)
+    
+safe_report_counter_1 = 0
+for report in sanatized_input:      
+    result = report_safety_check(report)
+    if result == True:
+        safe_report_counter_1 += 1
+        
+print('Number of safe reports: ', safe_report_counter_1)
+
+'''
+--- Part Two ---
+
+The engineers are surprised by the low number of safe reports until they 
+realize they forgot to tell you about the Problem Dampener.
+
+The Problem Dampener is a reactor-mounted module that lets the reactor 
+safety systems tolerate a single bad level in what would otherwise be a 
+safe report. It's like the bad level never happened!
+
+Now, the same rules apply as before, except if removing a single level from 
+an unsafe report would make it safe, the report instead counts as safe.
+
+More of the above example's reports are now safe:
+
+    7 6 4 2 1: Safe without removing any level.
+    1 2 7 8 9: Unsafe regardless of which level is removed.
+    9 7 6 2 1: Unsafe regardless of which level is removed.
+    1 3 2 4 5: Safe by removing the second level, 3.
+    8 6 4 4 1: Safe by removing the third level, 4.
+    1 3 6 7 9: Safe without removing any level.
+
+Thanks to the Problem Dampener, 4 reports are actually safe!
+
+Update your analysis by handling situations where the Problem Dampener can 
+remove a single level from unsafe reports. How many reports are now safe?
+'''
+safe_report_counter_2 = 0
+for report in sanatized_input:      
+    result = report_safety_check(report)
+    if result == True:
+        safe_report_counter_2 += 1
+    elif result == False:
+        pass #Redo the safety check, but for each sublist that is missing one level from the report
+        
+print('Number of safe reports: ', safe_report_counter_2)

@@ -88,7 +88,7 @@ To begin, get your puzzle input (day_1_puzzle_input_1.txt).
 # For each position in both lists, subtract number in list 1 from number in list 2 and add the absolute value to distance counter.
 # Print final distance counter value.
 
-file = open('.\\day_1\\day_1_puzzle_input')
+file = open('.\\day_1\\day_1_puzzle_input.txt')
 raw_input = file.read().split()
 raw_list_1 = []
 raw_list_2 = []

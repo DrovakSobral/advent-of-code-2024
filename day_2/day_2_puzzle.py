@@ -113,6 +113,8 @@ for report in sanatized_input:
     else:
         for x in range(len(report)):
             sub_report = report.copy()
+            # Note to self: when using list.remove(item) the function removes all instances of that item in a list.
+            # list.pop(index) on the other hand, removes the exact index
             sub_report.pop(x)
             if report_safety_check(sub_report):
                 safe_report_counter_2 += 1
